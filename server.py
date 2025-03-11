@@ -14,14 +14,21 @@ def predict():
     features = np.array(data['features']).reshape(1, -1)
     features = scaler.transform(features)
 
-    # Get failure probability
-    probability = model.predict_proba(features)[0][1]  # Probability of failure
-    print(f"Failure Probability: {probability}")  # Print for debugging
+    probability = model.predict_proba(features)[0][1]
+    print(f"Failure Probability: {probability}")
 
-    # Adjust failure threshold (default is 0.5, we will lower it)
-    prediction = 1 if probability > 0.1 else 0  # New threshold (More sensitive
+    # Adaptive Thresholding
+    cpu_usage = features[0][0]
+    error_logs = features[0][6]
+    
+    if cpu_usage > 90 or error_logs > 10:
+        threshold = 0.1  # More aggressive for high-risk cases
+    else:
+        threshold = 0.3  # Less sensitive for normal systems
 
+    prediction = 1 if probability > threshold else 0
     return jsonify({"failure_prediction": prediction, "probability": probability})
+
 
 
 if __name__ == '__main__':
