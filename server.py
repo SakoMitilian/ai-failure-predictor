@@ -19,7 +19,7 @@ def predict():
     print(f"Failure Probability: {probability}")  # Print for debugging
 
     # Adjust failure threshold (default is 0.5, we will lower it)
-    prediction = 1 if probability > 0.3 else 0  # More sensitive to failures
+    prediction = 1 if probability > 0.1 else 0  # New threshold (More sensitive
 
     return jsonify({"failure_prediction": prediction, "probability": probability})
 
