@@ -17,17 +17,22 @@ def predict():
     probability = model.predict_proba(features)[0][1]
     print(f"Failure Probability: {probability}")
 
-    # Adaptive Thresholding
+    # Extract key system metrics
     cpu_usage = features[0][0]
+    temp = features[0][3]
     error_logs = features[0][6]
-    
-    if cpu_usage > 90 or error_logs > 10:
-        threshold = 0.1  # More aggressive for high-risk cases
+
+    # **Dynamic Threshold Based on System Condition**
+    if cpu_usage > 90 or temp > 85 or error_logs > 10:
+        threshold = 0.15  # More sensitive for risky cases
+    elif cpu_usage < 50 and temp < 60 and error_logs == 0:
+        threshold = 0.35  # More strict for healthy systems
     else:
-        threshold = 0.3  # Less sensitive for normal systems
+        threshold = 0.25  # Default case
 
     prediction = 1 if probability > threshold else 0
     return jsonify({"failure_prediction": prediction, "probability": probability})
+
 
 
 
