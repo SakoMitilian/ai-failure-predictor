@@ -11,9 +11,10 @@ scaler = pickle.load(open("scaler.pkl", "rb"))
 
 # ✅ Define the exact feature column order (MUST match training dataset)
 FEATURE_COLUMNS = [
-    "cpu_usage", "ram_usage", "disk_io", "temperature", "gpu_load",
-    "network_latency", "error_logs", "disk_usage", "uptime"
+    "cpu_usage", "ram_usage", "disk_io", "temperature", "fan_speed",
+    "power_consumption", "error_logs", "system_uptime", "network_latency"
 ]
+
 
 @app.route('/predict', methods=['POST'])
 def predict():
